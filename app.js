@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/users');
 const cardRoutes = require('./routes/cards');
+const { NOT_FOUND_ERROR_CODE } = require('./constants');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -24,6 +25,11 @@ app.use((req, res, next) => {
 
 app.use('/users', userRoutes);
 app.use('/cards', cardRoutes);
+
+app.use((req, res) => {
+  res.status(NOT_FOUND_ERROR_CODE);
+  res.send({ message: 'Страница не найдена!' });
+});
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
