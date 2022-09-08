@@ -32,6 +32,9 @@ module.exports.deleteCardById = (req, res) => {
     .then((card) => {
       if (card === null) {
         res.status(NOT_FOUND_ERROR_CODE);
+      }
+      if (!req.params.id) {
+        res.status(BAD_REQUEST_ERROR_CODE);
       } else res.send({ data: card });
     })
     .catch((err) => res.status(500).send({ message: err.message }));
