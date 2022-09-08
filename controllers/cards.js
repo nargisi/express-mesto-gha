@@ -31,11 +31,12 @@ module.exports.deleteCardById = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => {
       if (card === null) {
-        res.status(NOT_FOUND_ERROR_CODE);
-      }
-      if (!req.params.id) {
-        res.status(BAD_REQUEST_ERROR_CODE);
-      } else res.send({ data: card });
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Карточки с таким id не существует!' });
+      } else { res.send({ data: card }); }
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => {
+      if (err.message.includes('Cast to ObjectId failed')) {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
+      } else { res.status(500).send({ message: err.message }); }
+    });
 };

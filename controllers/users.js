@@ -15,13 +15,16 @@ module.exports.getUserById = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
       if (user === null) {
-        res.status(NOT_FOUND_ERROR_CODE);
-      }
-      if (!req.params.id) {
-        res.status(BAD_REQUEST_ERROR_CODE);
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Пользователя с таким id не существует!' });
       } else res.send({ data: user });
     })
-    .catch((err) => res.status(SERVER_ERROR_CODE).send({ message: err.message }));
+    .catch((err) => {
+      if (err.message.includes('Cast to ObjectId failed')) {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
+      } else {
+        res.status(SERVER_ERROR_CODE).send({ message: err.message });
+      }
+    });
 };
 
 module.exports.createUser = (req, res) => {
