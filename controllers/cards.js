@@ -30,7 +30,7 @@ module.exports.deleteCardById = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => {
       if (card === null) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Что-то пошло не так! Удалить невозможно!' });
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Карточки с таким id не существует!' });
       } else { res.send({ data: card }); }
     })
     .catch((err) => {
@@ -48,7 +48,7 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (card === null) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Что-то пошло не так!' });
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Карточки с таким id не существует!' });
       } else { res.send({ data: card }); }
     })
     .catch((err) => {
@@ -65,7 +65,9 @@ module.exports.dislikeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      res.send({ data: card });
+      if (card === null) {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Карточки с таким id не существует!' });
+      } else { res.send({ data: card }); }
     })
     .catch((err) => {
       if (err.message.includes('Cast to ObjectId failed')) {
