@@ -43,17 +43,21 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user.id, { name, about }, {
+  User.findByIdAndUpdate(req.user._id, { name, about }, {
     new: true,
     runValidators: true,
   })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(SERVER_ERROR_CODE).send({ message: err.message }));
+    .catch((err) => {
+      if (err.message.includes('validation failed')) {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: err.message }); }
+    });
 };
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user.id, { avatar }, {
+  User.findByIdAndUpdate(req.user._id, { avatar }, {
     new: true,
     runValidators: true,
   })
