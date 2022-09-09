@@ -19,7 +19,7 @@ module.exports.getUserById = (req, res) => {
       } else res.send({ data: user });
     })
     .catch((err) => {
-      if (err.message.includes('Cast to ObjectId failed')) {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else {
         res.status(SERVER_ERROR_CODE).send({ message: err.message });
@@ -35,7 +35,7 @@ module.exports.createUser = (req, res) => {
       res.send({ data: user });
     })
     .catch((err) => {
-      if (err.message.includes('validation failed')) {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else { res.status(SERVER_ERROR_CODE).send({ message: err.message }); }
     });
@@ -49,7 +49,7 @@ module.exports.updateUser = (req, res) => {
   })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.message.includes('Validation failed')) {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else { res.status(SERVER_ERROR_CODE).send({ message: err.message }); }
     });

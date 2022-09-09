@@ -20,7 +20,7 @@ module.exports.createCard = (req, res) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.message.includes('validation failed')) {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else res.status(SERVER_ERROR_CODE).send({ message: err.message });
     });
@@ -34,7 +34,7 @@ module.exports.deleteCardById = (req, res) => {
       } else { res.send({ data: card }); }
     })
     .catch((err) => {
-      if (err.message.includes('Cast to ObjectId failed')) {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else { res.status(500).send({ message: err.message }); }
     });
@@ -52,7 +52,7 @@ module.exports.likeCard = (req, res) => {
       } else { res.send({ data: card }); }
     })
     .catch((err) => {
-      if (err.message.includes('Cast to ObjectId failed')) {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else { res.status(500).send({ message: err.message }); }
     });
@@ -70,7 +70,7 @@ module.exports.dislikeCard = (req, res) => {
       } else { res.send({ data: card }); }
     })
     .catch((err) => {
-      if (err.message.includes('Cast to ObjectId failed')) {
+      if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
       } else { res.status(500).send({ message: err.message }); }
     });
