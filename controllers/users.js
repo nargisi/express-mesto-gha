@@ -8,7 +8,7 @@ const {
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch((err) => res.status(SERVER_ERROR_CODE).send({ message: err.message }));
+    .catch(() => res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }));
 };
 
 module.exports.getUserById = (req, res) => {
@@ -20,9 +20,9 @@ module.exports.getUserById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Передан некорректный id!' });
       } else {
-        res.status(SERVER_ERROR_CODE).send({ message: err.message });
+        res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' });
       }
     });
 };
@@ -36,8 +36,8 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
-      } else { res.status(SERVER_ERROR_CODE).send({ message: err.message }); }
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
     });
 };
 
@@ -50,8 +50,8 @@ module.exports.updateUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
-      } else { res.status(SERVER_ERROR_CODE).send({ message: err.message }); }
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
     });
 };
 
@@ -62,5 +62,9 @@ module.exports.updateAvatar = (req, res) => {
     runValidators: true,
   })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(SERVER_ERROR_CODE).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
+    });
 };

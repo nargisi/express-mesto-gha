@@ -1,10 +1,4 @@
-const { connect, Schema, model } = require('mongoose');
-
-connect('mongodb://localhost:27017/mestodb', {
-  useNewUrlParser: true,
-  // useCreateIndex: true,
-  // useFindAndModify: false,
-});
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
   name: {

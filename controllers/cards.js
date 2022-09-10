@@ -10,7 +10,7 @@ module.exports.getCards = (req, res) => {
     .then((cards) => {
       res.send({ data: cards });
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(() => res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -21,8 +21,8 @@ module.exports.createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
-      } else res.status(SERVER_ERROR_CODE).send({ message: err.message });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+      } else res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' });
     });
 };
 
@@ -35,8 +35,8 @@ module.exports.deleteCardById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
-      } else { res.status(500).send({ message: err.message }); }
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Передан некорректный id!' });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
     });
 };
 
@@ -53,8 +53,8 @@ module.exports.likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
-      } else { res.status(500).send({ message: err.message }); }
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
     });
 };
 
@@ -71,7 +71,7 @@ module.exports.dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: err.message });
-      } else { res.status(500).send({ message: err.message }); }
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
     });
 };
