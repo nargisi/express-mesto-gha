@@ -2,6 +2,7 @@ const Card = require('../models/cards');
 const {
   BAD_REQUEST_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
+  FORBIDDEN,
   SERVER_ERROR_CODE,
 } = require('../constants');
 
@@ -31,7 +32,10 @@ module.exports.deleteCardById = (req, res) => {
     .then((card) => {
       if (card === null) {
         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Карточки с таким id не существует!' });
-      } else { res.send({ data: card }); }
+      }
+      if (card.owner.toString() !== req.user._id) {
+        res.status(FORBIDDEN).send({ message: 'Карточку удалять запрещено!!' });
+      } else { res.send({ data: card, message: 'DELETED' }); }
     })
     .catch((err) => {
       if (err.name === 'CastError') {

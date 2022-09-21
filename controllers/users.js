@@ -4,7 +4,9 @@ const User = require('../models/users');
 const {
   BAD_REQUEST_ERROR_CODE,
   UNAUTHORIZED,
+  FORBIDDEN,
   NOT_FOUND_ERROR_CODE,
+  CONFLICT,
   SERVER_ERROR_CODE,
 } = require('../constants');
 
@@ -32,9 +34,25 @@ module.exports.getUserById = (req, res) => {
     });
 };
 
+module.exports.getAboutUser = (req, res) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (user === null) {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Пользователя с таким id не существует!' });
+      } else res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Передан некорректный id!' });
+      } else {
+        res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' });
+      }
+    });
+};
+
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email })
+  User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
         return res.status(UNAUTHORIZED).send({ message: 'Неправильные почта или пароль!' });
@@ -46,7 +64,7 @@ module.exports.login = (req, res) => {
             return res.status(UNAUTHORIZED).send({ message: 'Неправильные почта или пароль!' });
           }
           const token = jwt.sign(
-            { id: user._id },
+            { _id: user._id },
             JWT_SECRET,
             { expiresIn: '7d' },
           );
@@ -77,6 +95,9 @@ module.exports.createUser = (req, res) => {
         res.send({ data: user });
       })
       .catch((err) => {
+        if (err.code === 11000) {
+          res.status(CONFLICT).send({ message: 'Такой пользователь уже существует!' });
+        }
         if (err.name === 'ValidationError') {
           res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
         } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
@@ -89,7 +110,11 @@ module.exports.updateUser = (req, res) => {
     new: true,
     runValidators: true,
   })
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (!req.user._id) {
+        res.status(FORBIDDEN).send({ message: 'Вносить изменения запрещено!!' });
+      } else res.send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
@@ -103,7 +128,11 @@ module.exports.updateAvatar = (req, res) => {
     new: true,
     runValidators: true,
   })
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (!req.user._id) {
+        res.status(FORBIDDEN).send({ message: 'Вносить изменения запрещено!!' });
+      } else res.send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });

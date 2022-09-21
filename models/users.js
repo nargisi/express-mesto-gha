@@ -24,6 +24,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    dropDups: true,
     validate: {
       validator(value) {
         return validator.isEmail(value);
@@ -34,7 +35,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    // minlength: [8, 'Должно быть не менее 8 символов!'],
+    select: false,
   },
 });
 
