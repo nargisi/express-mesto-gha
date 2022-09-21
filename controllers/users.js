@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/users');
 const {
   BAD_REQUEST_ERROR_CODE,
@@ -28,17 +29,21 @@ module.exports.getUserById = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-
-  User.create({ name, about, avatar })
-    .then((user) => {
-      res.send({ data: user });
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
-      } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
-    });
+      .then((user) => {
+        res.send({ data: user });
+      })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы некорректные данные!' });
+        } else { res.status(SERVER_ERROR_CODE).send({ message: 'Ошибка сервера!' }); }
+      }));
 };
 
 module.exports.updateUser = (req, res) => {
