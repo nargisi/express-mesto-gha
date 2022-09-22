@@ -38,6 +38,10 @@ const userSchema = new Schema({
     select: false,
     minlength: [8, 'Должно быть не менее 8 символов!'],
   },
+  // toObject: {
+  //   useProjection: true,
+  //   versionKey: false,
+  // },
 });
 
 module.exports = model('user', userSchema);
