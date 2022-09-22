@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(req.cookies.jwt, JWT_SECRET);
+    payload = jwt.verify(req.cookies.jwt, 'JWT_SECRET');
   } catch (err) {
     return next(new UnauthorizedError('Необходима авторизация!'));
   }

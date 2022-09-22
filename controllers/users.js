@@ -9,7 +9,7 @@ const ForbiddenError = require('../errors/forbidden-err');
 const UnauthorizedError = require('../errors/unathorized-err');
 const ServerError = require('../errors/server-err');
 
-const { JWT_SECRET } = process.env;
+// const { JWT_SECRET } = process.env;
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -64,7 +64,7 @@ module.exports.login = (req, res, next) => {
           }
           const token = jwt.sign(
             { _id: user._id },
-            JWT_SECRET,
+            'JWT_SECRET',
             { expiresIn: '7d' },
           );
           res.cookie('jwt', token, {
