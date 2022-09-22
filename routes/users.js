@@ -6,7 +6,11 @@ const {
 
 router.get('/', getUsers);
 router.get('/me', getAboutUser);
-router.get('/:id', getUserById);
+router.get('/:id', celebrate({
+  params: Joi.object().keys({
+    id: Joi.string(),
+  }),
+}), getUserById);
 router.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -15,7 +19,7 @@ router.patch('/me', celebrate({
 }), updateUser);
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string(),
+    avatar: Joi.string().uri(),
   }),
 }), updateAvatar);
 
