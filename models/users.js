@@ -36,6 +36,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     select: false,
+    minlength: [8, 'Должно быть не менее 8 символов!'],
   },
 });
 

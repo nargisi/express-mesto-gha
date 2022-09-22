@@ -27,7 +27,8 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCardById = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.id)
+  const { cardId } = req.params.id;
+  Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (card === null) {
         next(new NotFoundError('Карточки с таким id не существует!'));
