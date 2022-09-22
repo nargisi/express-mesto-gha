@@ -39,6 +39,12 @@ app.use((req, res) => {
   res.send({ message: 'Страница не найдена!' });
 });
 
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  // console.log('Я МОЛОДЕЦ!!!');
+  res.status(err.statusCode).send({ message: err.message });
+});
+
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
