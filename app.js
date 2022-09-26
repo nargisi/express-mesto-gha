@@ -38,7 +38,7 @@ app.post('/signup', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().uri({
       scheme: [
-        'https',
+        'https', 'http',
       ],
     }),
     email: Joi.string().required().email(),
