@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const validator = require('validator');
 
 const cardSchema = new Schema({
   name: {
@@ -12,6 +13,12 @@ const cardSchema = new Schema({
     required: true,
     match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/,
       'Пожалуйста, введите корректную ссылку!'],
+    validate: {
+      validator(value) {
+        return validator.isURL(value);
+      },
+      message: (props) => `${props.value} Пожалуйста, введите корректную ссылку!`,
+    },
 
   },
   owner: {
@@ -21,6 +28,7 @@ const cardSchema = new Schema({
   },
   likes: [{
     type: Schema.Types.ObjectId,
+    ref: 'user',
     default: [],
   }],
   createdAt: {

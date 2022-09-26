@@ -5,7 +5,6 @@ const User = require('../models/users');
 const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
-const ForbiddenError = require('../errors/forbidden-err');
 const UnauthorizedError = require('../errors/unathorized-err');
 const ServerError = require('../errors/server-err');
 
@@ -96,8 +95,7 @@ module.exports.createUser = (req, res, next) => {
       .catch((err) => {
         if (err.code === 11000) {
           next(new ConflictError('Такой пользователь уже существует!'));
-        }
-        if (err.name === 'ValidationError') {
+        } else if (err.name === 'ValidationError') {
           next(new BadRequestError('Переданы некорректные данные!'));
         } else { next(new ServerError('Ошибка сервера!')); }
       }));
@@ -110,9 +108,7 @@ module.exports.updateUser = (req, res, next) => {
     runValidators: true,
   })
     .then((user) => {
-      if (!req.user._id) {
-        next(new ForbiddenError('Вносить изменения запрещено!'));
-      } else res.send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -128,9 +124,7 @@ module.exports.updateAvatar = (req, res, next) => {
     runValidators: true,
   })
     .then((user) => {
-      if (!req.user._id) {
-        next(new ForbiddenError('Вносить изменения запрещено!'));
-      } else res.send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

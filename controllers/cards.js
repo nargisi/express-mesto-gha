@@ -27,15 +27,16 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCardById = (req, res, next) => {
-  // const { cardId } = req.params.id;
-  Card.findByIdAndRemove(req.params.id)
+  Card.findById(req.params.id)
     .then((card) => {
       if (card === null) {
         next(new NotFoundError('Карточки с таким id не существует!'));
-      }
-      if (card.owner.toString() !== req.user._id) {
+      } else if (card.owner.toString() !== req.user._id) {
         next(new ForbiddenError('Карточку удалять запрещено!'));
-      } else { res.send({ data: card, message: 'DELETED' }); }
+      } else {
+        Card.findByIdAndRemove(req.params.id)
+          .then(() => res.send({ data: card, message: 'DELETED' }));
+      }
     })
     .catch((err) => {
       if (err.name === 'CastError') {

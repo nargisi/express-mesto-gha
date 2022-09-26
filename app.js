@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -30,7 +29,7 @@ app.use('/cards', auth, cardRoutes);
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
   }),
 }), login);
 app.post('/signup', celebrate({
@@ -43,7 +42,7 @@ app.post('/signup', celebrate({
       ],
     }),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
   }).unknown(true),
 }), createUser);
 
@@ -55,7 +54,6 @@ app.use(errors());
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  // console.log('Я МОЛОДЕЦ!!!');
   res.status(err.statusCode).send({ message: err.message });
 });
 
