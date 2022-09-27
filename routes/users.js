@@ -4,6 +4,7 @@ Joi.objectId = require('joi-objectid')(Joi);
 const {
   getUsers, getUserById, getAboutUser, updateUser, updateAvatar,
 } = require('../controllers/users');
+const { patternURL } = require('../constants');
 
 router.get('/', getUsers);
 router.get('/me', getAboutUser);
@@ -20,11 +21,7 @@ router.patch('/me', celebrate({
 }), updateUser);
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().uri({
-      scheme: [
-        'https', 'http',
-      ],
-    }),
+    avatar: Joi.string().uri().regex(patternURL).required(),
   }),
 }), updateAvatar);
 
