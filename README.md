@@ -1,31 +1,13 @@
-[![Tests](https://github.com/nargisi/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/nargisi/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/nargisi/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/nargisi/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
+### express-mesto-gha
 
-# Проект Mesto фронтенд + бэкенд
+## Stack: Node.js, Express.js, MongoDB, JS
 
-## Настройка бейджей статуса тестов
+This is an backend to project react-mesto (auth).
 
-Перед началом работы над проектом рекомендуется исправить бейджи, отражающие статус прохождения тестов.
-Для этого замените разметку бейджей на следующий фрагмент, подставив вместо `${имя_пользователя}` и `${имя_репозитория}` соответствующие значения.
+# Features:
 
-```
-[![Tests for sprint 13](https://github.com/${имя_пользователя}/${имя репозитория}/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/${имя_пользователя}/${имя репозитория}/actions/workflows/tests-13-sprint.yml)
+- user's authentification by token;
 
-[![Tests for sprint 14](https://github.com/${имя_пользователя}/${имя репозитория}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${имя_пользователя}/${имя репозитория}/actions/workflows/tests-14-sprint.yml)
-```
+- validation using Joi;
 
-## Директории
-
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки  
-`/models` — папка с файлами описания схем пользователя и карточки
-
-Остальные директории вспомогательные, создаются при необходимости разработчиком
-
-## Запуск проекта
-
-`npm run start` — запускает сервер  
-`npm run dev` — запускает сервер с hot-reload
-
-## Ссылка проекта на GitHub
-
-https://nargisi.github.io/express-mesto-gha/
+- centralised error handling.
