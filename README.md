@@ -11,3 +11,8 @@ This is an backend to project react-mesto (auth).
 - validation using Joi;
 
 - centralised error handling.
+
+# How to run:
+
+`npm run start` — start server
+`npm run dev` — start server with hot-reload
